@@ -1,0 +1,27 @@
+
+<svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Paw Pattern -->
+  <g opacity="0.05">
+    <!-- Paw 1 -->
+    <ellipse cx="50" cy="70" rx="15" ry="20" transform="rotate(-20 50 70)" fill="#FFAB40"/>
+    <ellipse cx="85" cy="60" rx="15" ry="20" transform="rotate(20 85 60)" fill="#FFAB40"/>
+    <ellipse cx="30" cy="110" rx="15" ry="20" transform="rotate(-50 30 110)" fill="#FFAB40"/>
+    <ellipse cx="105" cy="100" rx="15" ry="20" transform="rotate(50 105 100)" fill="#FFAB40"/>
+    <ellipse cx="67.5" cy="85" rx="25" ry="30" fill="#FFAB40"/>
+    
+    <!-- Bath Tub -->
+    <path d="M200 50 C 200 40, 240 40, 240 50 L 240 70 C 240 80, 200 80, 200 70 Z" fill="#FFAB40"/>
+    <rect x="190" y="65" width="60" height="10" rx="5" fill="#FFAB40"/>
+    <ellipse cx="220" cy="60" rx="15" ry="8" fill="#FFFFFF"/>
+    
+    <!-- Scissors -->
+    <path d="M150 200 L 170 180 L 190 200 L 170 220 Z" stroke="#FFAB40" stroke-width="3" fill="none"/>
+    <path d="M150 200 C 145 205, 140 200, 140 195 C 140 190, 145 185, 150 190" stroke="#FFAB40" stroke-width="3" fill="none"/>
+    <path d="M190 200 C 195 205, 200 200, 200 195 C 200 190, 195 185, 190 190" stroke="#FFAB40" stroke-width="3" fill="none"/>
+    
+    <!-- Soap Bubbles -->
+    <circle cx="270" cy="250" r="15" stroke="#FFAB40" stroke-width="2" fill="none"/>
+    <circle cx="290" cy="230" r="10" stroke="#FFAB40" stroke-width="2" fill="none"/>
+    <circle cx="260" cy="220" r="8" stroke="#FFAB40" stroke-width="2" fill="none"/>
+  </g>
+</svg>

@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,23 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+        // PetClub custom colors
+        petYellow: {
+          light: '#FFEF99',
+          DEFAULT: '#FFDE29',
+          dark: '#FFD000',
+        },
+        petOrange: {
+          light: '#FFCE99',
+          DEFAULT: '#FFAB40',
+          dark: '#FF9100',
+        },
+        petBrown: {
+          light: '#A67C52',
+          DEFAULT: '#8D6E63',
+          dark: '#5D4037',
+        },
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,12 +101,25 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+        'float': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-5px)' },
+        },
+        'scale': {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.05)' },
+        },
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
-			}
+				'accordion-up': 'accordion-up 0.2s ease-out',
+        'float': 'float 3s ease-in-out infinite',
+        'scale': 'scale 3s ease-in-out infinite',
+			},
+      backgroundImage: {
+        'pet-pattern': "url('/images/pattern.svg')",
+      },
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
