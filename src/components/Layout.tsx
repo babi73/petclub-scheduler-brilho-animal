@@ -13,7 +13,8 @@ import {
   useSidebar
 } from '@/components/ui/sidebar';
 import { NavLink, Outlet } from 'react-router-dom';
-import { Calendar, PawPrint, Clock, User, Settings, List, Search, Plus } from 'lucide-react';
+import { Calendar, PawPrint, Clock, User, Settings, List, Search, Plus, ShoppingBag } from 'lucide-react';
+import ShoppingCart from './products/ShoppingCart';
 
 const Layout: React.FC = () => {
   // Check what properties are available in the sidebar context
@@ -113,6 +114,16 @@ const Layout: React.FC = () => {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 
+                {/* New Products Menu Item */}
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <NavLink to="/produtos" className={getNavClass}>
+                      <ShoppingBag className="h-5 w-5 mr-3" />
+                      {!isCollapsed && <span>Produtos</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
                     <NavLink to="/configuracoes" className={getNavClass}>
@@ -140,7 +151,10 @@ const Layout: React.FC = () => {
             />
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            {/* Shopping Cart */}
+            <ShoppingCart />
+            
             <span className="text-sm text-petBrown">Olá, Atendente</span>
             <div className="bg-petOrange/20 h-8 w-8 rounded-full flex items-center justify-center">
               <User size={16} className="text-petOrange" />
