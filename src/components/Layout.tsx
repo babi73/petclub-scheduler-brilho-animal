@@ -12,7 +12,7 @@ import {
   SidebarTrigger,
   useSidebar
 } from '@/components/ui/sidebar';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { Calendar, PawPrint, Clock, User, Settings, List, Search, Plus, ShoppingBag } from 'lucide-react';
 import ShoppingCart from './products/ShoppingCart';
 
@@ -21,6 +21,7 @@ const Layout: React.FC = () => {
   const sidebar = useSidebar();
   // We'll use the state to determine if it's collapsed 
   const isCollapsed = sidebar.state === "collapsed";
+  const navigate = useNavigate();
 
   const getNavClass = ({ isActive }: { isActive: boolean }) => {
     return `flex items-center p-2 rounded-lg text-base ${
@@ -28,6 +29,14 @@ const Layout: React.FC = () => {
         ? 'bg-petOrange/20 text-petBrown font-medium' 
         : 'hover:bg-petYellow/20 text-petBrown/70'
     }`;
+  };
+
+  const handleNavigation = (to: string) => {
+    navigate(to);
+    // Close mobile sidebar if it's open
+    if (sidebar.openMobile) {
+      sidebar.setOpenMobile(false);
+    }
   };
 
   return (
@@ -70,66 +79,73 @@ const Layout: React.FC = () => {
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <NavLink to="/" end className={getNavClass}>
-                      <Calendar className="h-5 w-5 mr-3" />
-                      {!isCollapsed && <span>Agendamentos</span>}
-                    </NavLink>
+                  <SidebarMenuButton 
+                    onClick={() => handleNavigation("/")}
+                    className={`${window.location.pathname === "/" ? "bg-petOrange/20 text-petBrown font-medium" : "hover:bg-petYellow/20 text-petBrown/70"} flex items-center p-2 rounded-lg text-base`}
+                  >
+                    <Calendar className="h-5 w-5 mr-3" />
+                    {!isCollapsed && <span>Agendamentos</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <NavLink to="/historico" className={getNavClass}>
-                      <Clock className="h-5 w-5 mr-3" />
-                      {!isCollapsed && <span>Histórico</span>}
-                    </NavLink>
+                  <SidebarMenuButton 
+                    onClick={() => handleNavigation("/historico")}
+                    className={`${window.location.pathname === "/historico" ? "bg-petOrange/20 text-petBrown font-medium" : "hover:bg-petYellow/20 text-petBrown/70"} flex items-center p-2 rounded-lg text-base`}
+                  >
+                    <Clock className="h-5 w-5 mr-3" />
+                    {!isCollapsed && <span>Histórico</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <NavLink to="/clientes" className={getNavClass}>
-                      <User className="h-5 w-5 mr-3" />
-                      {!isCollapsed && <span>Clientes</span>}
-                    </NavLink>
+                  <SidebarMenuButton 
+                    onClick={() => handleNavigation("/clientes")}
+                    className={`${window.location.pathname === "/clientes" ? "bg-petOrange/20 text-petBrown font-medium" : "hover:bg-petYellow/20 text-petBrown/70"} flex items-center p-2 rounded-lg text-base`}
+                  >
+                    <User className="h-5 w-5 mr-3" />
+                    {!isCollapsed && <span>Clientes</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <NavLink to="/pets" className={getNavClass}>
-                      <PawPrint className="h-5 w-5 mr-3" />
-                      {!isCollapsed && <span>Pets</span>}
-                    </NavLink>
+                  <SidebarMenuButton 
+                    onClick={() => handleNavigation("/pets")}
+                    className={`${window.location.pathname === "/pets" ? "bg-petOrange/20 text-petBrown font-medium" : "hover:bg-petYellow/20 text-petBrown/70"} flex items-center p-2 rounded-lg text-base`}
+                  >
+                    <PawPrint className="h-5 w-5 mr-3" />
+                    {!isCollapsed && <span>Pets</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <NavLink to="/servicos" className={getNavClass}>
-                      <List className="h-5 w-5 mr-3" />
-                      {!isCollapsed && <span>Serviços</span>}
-                    </NavLink>
+                  <SidebarMenuButton 
+                    onClick={() => handleNavigation("/servicos")}
+                    className={`${window.location.pathname === "/servicos" ? "bg-petOrange/20 text-petBrown font-medium" : "hover:bg-petYellow/20 text-petBrown/70"} flex items-center p-2 rounded-lg text-base`}
+                  >
+                    <List className="h-5 w-5 mr-3" />
+                    {!isCollapsed && <span>Serviços</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 
-                {/* New Products Menu Item */}
+                {/* Products Menu Item */}
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <NavLink to="/produtos" className={getNavClass}>
-                      <ShoppingBag className="h-5 w-5 mr-3" />
-                      {!isCollapsed && <span>Produtos</span>}
-                    </NavLink>
+                  <SidebarMenuButton 
+                    onClick={() => handleNavigation("/produtos")}
+                    className={`${window.location.pathname.includes("/produtos") || window.location.pathname.includes("/produto/") ? "bg-petOrange/20 text-petBrown font-medium" : "hover:bg-petYellow/20 text-petBrown/70"} flex items-center p-2 rounded-lg text-base`}
+                  >
+                    <ShoppingBag className="h-5 w-5 mr-3" />
+                    {!isCollapsed && <span>Produtos</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <NavLink to="/configuracoes" className={getNavClass}>
-                      <Settings className="h-5 w-5 mr-3" />
-                      {!isCollapsed && <span>Configurações</span>}
-                    </NavLink>
+                  <SidebarMenuButton 
+                    onClick={() => handleNavigation("/configuracoes")}
+                    className={`${window.location.pathname === "/configuracoes" ? "bg-petOrange/20 text-petBrown font-medium" : "hover:bg-petYellow/20 text-petBrown/70"} flex items-center p-2 rounded-lg text-base`}
+                  >
+                    <Settings className="h-5 w-5 mr-3" />
+                    {!isCollapsed && <span>Configurações</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               </SidebarMenu>
@@ -168,7 +184,7 @@ const Layout: React.FC = () => {
           <button
             className="fixed bottom-8 right-8 bg-petOrange hover:bg-petOrange-dark text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all duration-200 group animate-scale"
             aria-label="Novo Agendamento"
-            onClick={() => window.location.href = "/novo-agendamento"}
+            onClick={() => handleNavigation("/novo-agendamento")}
           >
             <Plus size={24} />
             <span className="absolute right-full mr-2 bg-white text-petBrown px-3 py-1 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
