@@ -35,7 +35,7 @@ const Layout: React.FC = () => {
         className={`bg-white border-r border-petYellow shadow-sm transition-all duration-300 ${
           isCollapsed ? 'w-16' : 'w-64'
         }`}
-        collapsible="icon" // Use proper value: "offcanvas", "icon", or "none"
+        collapsible="icon"
       >
         <div className="p-4 flex justify-center items-center border-b border-petYellow/30">
           {isCollapsed ? (
@@ -45,7 +45,10 @@ const Layout: React.FC = () => {
               <img 
                 src="/lovable-uploads/e402b2bd-3375-4bb9-9ad4-2ab531a8d974.png" 
                 alt="PetClub Logo" 
-                className="h-12 w-12" 
+                className="h-12 w-12 object-contain"
+                style={{ 
+                  filter: 'brightness(1.1) drop-shadow(0 0 1px rgba(255,255,255,0.8))'
+                }}
               />
               <div>
                 <h1 className="text-xl font-bold text-petOrange">PetClub</h1>
@@ -58,7 +61,6 @@ const Layout: React.FC = () => {
         <SidebarContent>
           <SidebarTrigger className="self-end m-2" />
           
-          {/* Remove defaultOpen from SidebarGroup */}
           <SidebarGroup>
             <SidebarGroupLabel className="text-petBrown/70">
               Menu Principal
