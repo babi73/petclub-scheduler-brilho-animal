@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
 import { Filter as FilterIcon, Check, X } from 'lucide-react';
 import { ProductFilter, PetType, ProductCategory } from '@/types';
 import { getAllBrands, getPriceRange } from '@/data/products';

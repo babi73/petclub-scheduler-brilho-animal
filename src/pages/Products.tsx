@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import ProductCard from '@/components/products/ProductCard';
 import ProductsFilter from '@/components/products/ProductsFilter';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 import { ProductFilter, PetType, ProductCategory } from '@/types';
 import { filterProducts, getProductsByPetType } from '@/data/products';
 import { Dog, Cat, Bird, Rabbit, PawPrint } from 'lucide-react';

@@ -52,18 +52,21 @@ const Checkout: React.FC = () => {
     }
   });
   
+  // Fix for the spread types error
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     
     if (name.includes('.')) {
       const [parent, child] = name.split('.');
-      setCustomerInfo(prev => ({
-        ...prev,
-        [parent]: {
-          ...prev[parent as keyof typeof prev],
-          [child]: value
-        }
-      }));
+      if (parent === 'address') {
+        setCustomerInfo(prev => ({
+          ...prev,
+          address: {
+            ...prev.address,
+            [child]: value
+          }
+        }));
+      }
     } else {
       setCustomerInfo(prev => ({
         ...prev,
