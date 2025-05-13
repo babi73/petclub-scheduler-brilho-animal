@@ -1,4 +1,6 @@
 
+import type { LucideIcon } from 'lucide-react';
+
 export interface Pet {
   id: string;
   name: string;
@@ -43,6 +45,6 @@ export interface ServiceOption {
   id: Service;
   name: string;
   price: number;
-  icon?: React.ReactNode;
+  icon: LucideIcon;
   duration: number; // in minutes
 }

@@ -1,5 +1,6 @@
 
-import { SidebarProvider } from "@/components/ui/sidebar";
+import React from 'react';
+import { SidebarProvider as BaseSidebarProvider } from "@/components/ui/sidebar";
 
 interface AppSidebarProviderProps {
   children: React.ReactNode;
@@ -7,8 +8,9 @@ interface AppSidebarProviderProps {
 
 export function AppSidebarProvider({ children }: AppSidebarProviderProps) {
   return (
-    <SidebarProvider collapsedWidth={64}>
+    // The sidebar component doesn't accept collapsedWidth prop, so we'll remove it
+    <BaseSidebarProvider>
       {children}
-    </SidebarProvider>
+    </BaseSidebarProvider>
   );
 }

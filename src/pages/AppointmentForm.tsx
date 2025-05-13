@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { PawPrint, Calendar, Clock, Check, ArrowLeft } from 'lucide-react';
+import { PawPrint, Calendar, Clock, Check, ArrowLeft, User, List } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -193,7 +193,7 @@ const AppointmentForm: React.FC = () => {
                 onChange={(e) => setPetName(e.target.value)} 
                 className="pet-input"
                 required
-                disabled={useExistingPet && selectedPet}
+                disabled={useExistingPet && !!selectedPet}
               />
             </div>
             
@@ -202,7 +202,7 @@ const AppointmentForm: React.FC = () => {
               <Select 
                 value={petType} 
                 onValueChange={(value) => setPetType(value as PetType)}
-                disabled={useExistingPet && selectedPet}
+                disabled={useExistingPet && !!selectedPet}
               >
                 <SelectTrigger id="petType" className="pet-input">
                   <SelectValue placeholder="Tipo de Animal" />
@@ -224,7 +224,7 @@ const AppointmentForm: React.FC = () => {
                 value={petBreed} 
                 onChange={(e) => setPetBreed(e.target.value)} 
                 className="pet-input"
-                disabled={useExistingPet && selectedPet}
+                disabled={useExistingPet && !!selectedPet}
               />
             </div>
             
@@ -238,7 +238,7 @@ const AppointmentForm: React.FC = () => {
                 value={petWeight} 
                 onChange={(e) => setPetWeight(e.target.value)} 
                 className="pet-input"
-                disabled={useExistingPet && selectedPet}
+                disabled={useExistingPet && !!selectedPet}
               />
             </div>
             
@@ -250,7 +250,7 @@ const AppointmentForm: React.FC = () => {
                 onChange={(e) => setPetNotes(e.target.value)} 
                 placeholder="Ex: Alergias, comportamento, cuidados específicos..."
                 className="pet-input min-h-[100px] resize-none"
-                disabled={useExistingPet && selectedPet}
+                disabled={useExistingPet && !!selectedPet}
               />
             </div>
           </div>
@@ -269,7 +269,7 @@ const AppointmentForm: React.FC = () => {
                 onChange={(e) => setOwnerName(e.target.value)} 
                 className="pet-input"
                 required
-                disabled={useExistingPet && selectedPet}
+                disabled={useExistingPet && !!selectedPet}
               />
             </div>
             
@@ -282,7 +282,7 @@ const AppointmentForm: React.FC = () => {
                 placeholder="(00) 00000-0000"
                 className="pet-input"
                 required
-                disabled={useExistingPet && selectedPet}
+                disabled={useExistingPet && !!selectedPet}
               />
             </div>
           </div>
@@ -297,7 +297,7 @@ const AppointmentForm: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {services.map(service => {
-              const ServiceIcon = service.icon;
+              const IconComponent = service.icon;
               const isSelected = selectedServices.includes(service.id);
               
               return (
@@ -314,7 +314,7 @@ const AppointmentForm: React.FC = () => {
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center gap-2">
                       <div className={`p-2 rounded-full ${isSelected ? 'bg-petOrange/20' : 'bg-gray-100'}`}>
-                        {ServiceIcon && <ServiceIcon className={`h-4 w-4 ${isSelected ? 'text-petOrange' : 'text-gray-500'}`} />}
+                        <IconComponent className={`h-4 w-4 ${isSelected ? 'text-petOrange' : 'text-gray-500'}`} />
                       </div>
                       <span className="font-medium">{service.name}</span>
                     </div>

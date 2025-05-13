@@ -1,6 +1,7 @@
 
 import { Pet, Owner, Appointment, AppointmentWithDetails, ServiceOption } from './types';
 import { Bath, Scissors, PawPrint } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 // Sample Owners
 export const owners: Owner[] = [
@@ -59,7 +60,7 @@ export const pets: Pet[] = [
   },
 ];
 
-// Sample Services
+// Sample Services - Updated to use LucideIcon type
 export const services: ServiceOption[] = [
   { 
     id: 'banho-simples', 

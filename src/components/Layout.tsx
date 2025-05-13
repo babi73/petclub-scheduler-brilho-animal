@@ -16,7 +16,10 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { Calendar, PawPrint, Clock, User, Settings, List, Search, Plus } from 'lucide-react';
 
 const Layout: React.FC = () => {
-  const { collapsed } = useSidebar();
+  // Check what properties are available in the sidebar context
+  const sidebar = useSidebar();
+  // We'll use the state to determine if it's collapsed 
+  const isCollapsed = sidebar.state === "collapsed";
 
   const getNavClass = ({ isActive }: { isActive: boolean }) => {
     return `flex items-center p-2 rounded-lg text-base ${
@@ -30,12 +33,12 @@ const Layout: React.FC = () => {
     <div className="min-h-screen flex w-full">
       <Sidebar
         className={`bg-white border-r border-petYellow shadow-sm transition-all duration-300 ${
-          collapsed ? 'w-16' : 'w-64'
+          isCollapsed ? 'w-16' : 'w-64'
         }`}
-        collapsible
+        collapsible="icon" // Use proper value: "offcanvas", "icon", or "none"
       >
         <div className="p-4 flex justify-center items-center border-b border-petYellow/30">
-          {collapsed ? (
+          {isCollapsed ? (
             <PawPrint size={32} className="text-petOrange" />
           ) : (
             <div className="flex items-center gap-2">
@@ -55,7 +58,8 @@ const Layout: React.FC = () => {
         <SidebarContent>
           <SidebarTrigger className="self-end m-2" />
           
-          <SidebarGroup defaultOpen>
+          {/* Remove defaultOpen from SidebarGroup */}
+          <SidebarGroup>
             <SidebarGroupLabel className="text-petBrown/70">
               Menu Principal
             </SidebarGroupLabel>
@@ -66,7 +70,7 @@ const Layout: React.FC = () => {
                   <SidebarMenuButton asChild>
                     <NavLink to="/" end className={getNavClass}>
                       <Calendar className="h-5 w-5 mr-3" />
-                      {!collapsed && <span>Agendamentos</span>}
+                      {!isCollapsed && <span>Agendamentos</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -75,7 +79,7 @@ const Layout: React.FC = () => {
                   <SidebarMenuButton asChild>
                     <NavLink to="/historico" className={getNavClass}>
                       <Clock className="h-5 w-5 mr-3" />
-                      {!collapsed && <span>Histórico</span>}
+                      {!isCollapsed && <span>Histórico</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -84,7 +88,7 @@ const Layout: React.FC = () => {
                   <SidebarMenuButton asChild>
                     <NavLink to="/clientes" className={getNavClass}>
                       <User className="h-5 w-5 mr-3" />
-                      {!collapsed && <span>Clientes</span>}
+                      {!isCollapsed && <span>Clientes</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -93,7 +97,7 @@ const Layout: React.FC = () => {
                   <SidebarMenuButton asChild>
                     <NavLink to="/pets" className={getNavClass}>
                       <PawPrint className="h-5 w-5 mr-3" />
-                      {!collapsed && <span>Pets</span>}
+                      {!isCollapsed && <span>Pets</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -102,7 +106,7 @@ const Layout: React.FC = () => {
                   <SidebarMenuButton asChild>
                     <NavLink to="/servicos" className={getNavClass}>
                       <List className="h-5 w-5 mr-3" />
-                      {!collapsed && <span>Serviços</span>}
+                      {!isCollapsed && <span>Serviços</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -111,7 +115,7 @@ const Layout: React.FC = () => {
                   <SidebarMenuButton asChild>
                     <NavLink to="/configuracoes" className={getNavClass}>
                       <Settings className="h-5 w-5 mr-3" />
-                      {!collapsed && <span>Configurações</span>}
+                      {!isCollapsed && <span>Configurações</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
