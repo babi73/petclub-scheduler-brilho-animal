@@ -15,6 +15,7 @@ import Pets from "./pages/Pets";
 import Services from "./pages/Services";
 import Settings from "./pages/Settings";
 import Products from "./pages/Products";
+import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
 
@@ -38,6 +39,7 @@ const App = () => (
                 <Route path="servicos" element={<Services />} />
                 <Route path="produtos" element={<Products />} />
                 <Route path="produtos/:petType" element={<Products />} />
+                <Route path="produto/:productId" element={<ProductDetail />} />
                 <Route path="checkout" element={<Checkout />} />
                 <Route path="configuracoes" element={<Settings />} />
               </Route>
