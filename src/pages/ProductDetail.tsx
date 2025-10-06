@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -8,28 +8,26 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCart } from '@/contexts/CartContext';
 import { Product } from '@/types';
 import { ShoppingCart, ArrowLeft, Star, Heart } from 'lucide-react';
-import { products } from '@/data/products';
+import { useProduct } from '@/hooks/useProducts';
+import { toast } from 'sonner';
 
 const ProductDetail: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   
-  useEffect(() => {
-    if (productId) {
-      const foundProduct = products.find(p => p.id === productId);
-      if (foundProduct) {
-        setProduct(foundProduct);
-      } else {
-        // Product not found, redirect to products page
-        navigate('/produtos');
-      }
-    }
-  }, [productId, navigate]);
+  const { data: product, isLoading } = useProduct(productId || '');
   
-  if (!product) {
+  const handleAddToCart = () => {
+    if (!product) return;
+    for (let i = 0; i < quantity; i++) {
+      addToCart(product);
+    }
+    toast.success(`${quantity} ${quantity > 1 ? 'itens adicionados' : 'item adicionado'} ao carrinho!`);
+  };
+  
+  if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8 flex justify-center items-center h-64">
         <div className="text-center">
@@ -39,11 +37,18 @@ const ProductDetail: React.FC = () => {
     );
   }
   
-  const handleAddToCart = () => {
-    for (let i = 0; i < quantity; i++) {
-      addToCart(product);
-    }
-  };
+  if (!product) {
+    return (
+      <div className="container mx-auto px-4 py-8 flex justify-center items-center h-64">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-petBrown mb-4">Produto não encontrado</h2>
+          <Button onClick={() => navigate('/produtos')}>
+            Voltar para Produtos
+          </Button>
+        </div>
+      </div>
+    );
+  }
   
   const handleQuantityChange = (value: number) => {
     if (value >= 1 && value <= 10) {

@@ -1,12 +1,11 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import ProductCard from '@/components/products/ProductCard';
 import ProductsFilter from '@/components/products/ProductsFilter';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { ProductFilter, PetType, ProductCategory } from '@/types';
-import { filterProducts, getProductsByPetType } from '@/data/products';
+import { useProducts } from '@/hooks/useProducts';
 import { Dog, Cat, Bird, Rabbit, PawPrint } from 'lucide-react';
 
 interface CategoryOption {
@@ -69,17 +68,8 @@ const Products: React.FC = () => {
   const [filters, setFilters] = useState<ProductFilter>({ 
     petType: validPetType as PetType 
   });
-  const [filteredProducts, setFilteredProducts] = useState(getProductsByPetType(validPetType as PetType));
   
-  // Update filtered products when filters change
-  useEffect(() => {
-    setFilteredProducts(filterProducts(filters));
-  }, [filters]);
-  
-  // Update pet type filter when URL param changes
-  useEffect(() => {
-    setFilters(prev => ({ ...prev, petType: validPetType as PetType }));
-  }, [validPetType]);
+  const { data: products = [], isLoading } = useProducts(filters);
   
   const getPetIcon = (type: PetType) => {
     switch (type) {
@@ -173,9 +163,13 @@ const Products: React.FC = () => {
             availableCategories={categoriesByPetType[validPetType as PetType]}
           />
           
-          {filteredProducts.length > 0 ? (
+          {isLoading ? (
+            <div className="text-center py-12">
+              <p className="text-gray-500">Carregando produtos...</p>
+            </div>
+          ) : products.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {filteredProducts.map(product => (
+              {products.map(product => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
