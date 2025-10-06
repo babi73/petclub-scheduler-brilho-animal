@@ -14,7 +14,102 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      products: {
+        Row: {
+          brand: string
+          category: string
+          created_at: string | null
+          description: string
+          featured: boolean | null
+          id: string
+          image: string | null
+          in_stock: number
+          is_new: boolean | null
+          is_promotion: boolean | null
+          name: string
+          pet_size: string | null
+          pet_type: string[]
+          price: number
+          promotional_price: number | null
+          specifications: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          brand: string
+          category: string
+          created_at?: string | null
+          description: string
+          featured?: boolean | null
+          id?: string
+          image?: string | null
+          in_stock?: number
+          is_new?: boolean | null
+          is_promotion?: boolean | null
+          name: string
+          pet_size?: string | null
+          pet_type: string[]
+          price: number
+          promotional_price?: number | null
+          specifications?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          brand?: string
+          category?: string
+          created_at?: string | null
+          description?: string
+          featured?: boolean | null
+          id?: string
+          image?: string | null
+          in_stock?: number
+          is_new?: boolean | null
+          is_promotion?: boolean | null
+          name?: string
+          pet_size?: string | null
+          pet_type?: string[]
+          price?: number
+          promotional_price?: number | null
+          specifications?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          duration: number
+          icon: string | null
+          id: string
+          name: string
+          price: number
+          service_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          duration: number
+          icon?: string | null
+          id?: string
+          name: string
+          price: number
+          service_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          duration?: number
+          icon?: string | null
+          id?: string
+          name?: string
+          price?: number
+          service_id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
