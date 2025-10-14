@@ -365,7 +365,6 @@ const AppointmentForm: React.FC = () => {
                     mode="single"
                     selected={date}
                     onSelect={setDate}
-                    initialFocus
                     disabled={(date) => {
                       const today = new Date();
                       today.setHours(0, 0, 0, 0);
