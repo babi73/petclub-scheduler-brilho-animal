@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
   Sidebar, 
   SidebarContent, 
@@ -12,15 +12,24 @@ import {
   SidebarTrigger,
   useSidebar
 } from '@/components/ui/sidebar';
-import { NavLink, Outlet } from 'react-router-dom';
-import { Calendar, PawPrint, Clock, User, Settings, List, Search, Plus, ShoppingBag } from 'lucide-react';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Calendar, PawPrint, Clock, User, Settings, List, Search, Plus, ShoppingBag, LogOut } from 'lucide-react';
 import ShoppingCart from './products/ShoppingCart';
+import { useAuth } from '@/contexts/AuthContext';
+import { NotificationBell } from '@/components/NotificationBell';
+import { Button } from '@/components/ui/button';
 
 const Layout: React.FC = () => {
-  // Check what properties are available in the sidebar context
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const sidebar = useSidebar();
-  // We'll use the state to determine if it's collapsed 
   const isCollapsed = sidebar.state === "collapsed";
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/auth');
+    }
+  }, [user, navigate]);
 
   const getNavClass = ({ isActive }: { isActive: boolean }) => {
     return `flex items-center p-2 rounded-lg text-base ${
@@ -152,13 +161,21 @@ const Layout: React.FC = () => {
           </div>
           
           <div className="flex items-center gap-3">
-            {/* Shopping Cart */}
+            <NotificationBell />
             <ShoppingCart />
             
-            <span className="text-sm text-petBrown">Olá, Atendente</span>
+            <span className="text-sm text-petBrown">Olá, {user?.user_metadata?.name || 'Usuário'}</span>
             <div className="bg-petOrange/20 h-8 w-8 rounded-full flex items-center justify-center">
               <User size={16} className="text-petOrange" />
             </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={signOut}
+              title="Sair"
+            >
+              <LogOut className="h-5 w-5" />
+            </Button>
           </div>
         </header>
         

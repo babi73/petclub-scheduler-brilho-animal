@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { PawPrint, Calendar, Clock, Check, ArrowLeft, User, List } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -21,9 +20,11 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
-import { owners, pets, services } from '@/data';
-import { Pet, PetType } from '@/types';
+import { PetType } from '@/types';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAppointments } from '@/hooks/useAppointments';
+import { useServices } from '@/hooks/useServices';
+import { useToast } from '@/hooks/use-toast';
 
 const petTypes: { value: PetType; label: string }[] = [
   { value: 'dog', label: 'Cachorro' },
@@ -36,6 +37,8 @@ const petTypes: { value: PetType; label: string }[] = [
 const AppointmentForm: React.FC = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { createAppointment, isCreating } = useAppointments();
+  const { data: services = [] } = useServices();
   
   // Pet information
   const [petName, setPetName] = useState('');
@@ -52,10 +55,6 @@ const AppointmentForm: React.FC = () => {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState('10:00');
-
-  // Select an existing pet
-  const [selectedPet, setSelectedPet] = useState<string>('');
-  const [useExistingPet, setUseExistingPet] = useState(false);
   
   const handleServiceToggle = (serviceId: string) => {
     setSelectedServices(prev => 
@@ -63,39 +62,6 @@ const AppointmentForm: React.FC = () => {
         ? prev.filter(id => id !== serviceId)
         : [...prev, serviceId]
     );
-  };
-  
-  const handlePetSelection = (petId: string) => {
-    const pet = pets.find(p => p.id === petId);
-    if (pet) {
-      const owner = owners.find(o => o.id === pet.ownerId);
-      
-      setSelectedPet(petId);
-      setPetName(pet.name);
-      setPetType(pet.type);
-      setPetBreed(pet.breed);
-      setPetWeight(pet.weight.toString());
-      setPetNotes(pet.notes);
-      
-      if (owner) {
-        setOwnerName(owner.name);
-        setOwnerPhone(owner.phone);
-      }
-      
-      setUseExistingPet(true);
-    }
-  };
-  
-  const handleCreateNewPet = () => {
-    setSelectedPet('');
-    setPetName('');
-    setPetType('dog');
-    setPetBreed('');
-    setPetWeight('');
-    setPetNotes('');
-    setOwnerName('');
-    setOwnerPhone('');
-    setUseExistingPet(false);
   };
   
   const handleSubmit = (e: React.FormEvent) => {
@@ -118,19 +84,26 @@ const AppointmentForm: React.FC = () => {
       });
       return;
     }
-    
-    // In a real application, we would save the data to a database
-    toast({
-      title: "Agendamento Criado",
-      description: `${petName} foi agendado para ${format(date, "dd/MM/yyyy")} às ${time}.`,
-      action: (
-        <Button variant="outline" size="sm" className="bg-petYellow/20">
-          <Check className="h-4 w-4" />
-        </Button>
-      )
+
+    const [hours, minutes] = time.split(':');
+    const appointmentDate = new Date(date);
+    appointmentDate.setHours(parseInt(hours), parseInt(minutes));
+
+    createAppointment({
+      petData: {
+        name: petName,
+        type: petType,
+        breed: petBreed,
+        weight: parseFloat(petWeight) || 0,
+        notes: petNotes,
+      },
+      appointmentData: {
+        date: appointmentDate.toISOString(),
+        services: selectedServices,
+        notes: '',
+      },
     });
-    
-    // Navigate back to appointments
+
     navigate('/');
   };
   
@@ -154,37 +127,6 @@ const AppointmentForm: React.FC = () => {
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div className="md:col-span-2">
-              <Label className="text-sm text-petBrown/70">Escolha um pet cadastrado ou cadastre um novo</Label>
-              <div className="flex items-center mt-1 space-x-2">
-                <Select 
-                  value={selectedPet} 
-                  onValueChange={handlePetSelection}
-                  disabled={!useExistingPet}
-                >
-                  <SelectTrigger className={`pet-input ${!useExistingPet ? 'opacity-50' : ''}`}>
-                    <SelectValue placeholder="Selecione um pet" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {pets.map(pet => (
-                      <SelectItem key={pet.id} value={pet.id}>
-                        {pet.name} ({pet.breed})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                
-                <Button 
-                  type="button"
-                  variant={useExistingPet ? "outline" : "default"}
-                  onClick={() => setUseExistingPet(!useExistingPet)}
-                  className={!useExistingPet ? "bg-petYellow hover:bg-petYellow-dark text-petBrown" : ""}
-                >
-                  {useExistingPet ? "Novo Pet" : "Pet Existente"}
-                </Button>
-              </div>
-            </div>
-            
             <div>
               <Label htmlFor="petName" className="text-sm text-petBrown/70">Nome do Pet</Label>
               <Input 
@@ -192,8 +134,8 @@ const AppointmentForm: React.FC = () => {
                 value={petName} 
                 onChange={(e) => setPetName(e.target.value)} 
                 className="pet-input"
+                placeholder="Nome do pet"
                 required
-                disabled={useExistingPet && !!selectedPet}
               />
             </div>
             
@@ -202,7 +144,6 @@ const AppointmentForm: React.FC = () => {
               <Select 
                 value={petType} 
                 onValueChange={(value) => setPetType(value as PetType)}
-                disabled={useExistingPet && !!selectedPet}
               >
                 <SelectTrigger id="petType" className="pet-input">
                   <SelectValue placeholder="Tipo de Animal" />
@@ -224,7 +165,7 @@ const AppointmentForm: React.FC = () => {
                 value={petBreed} 
                 onChange={(e) => setPetBreed(e.target.value)} 
                 className="pet-input"
-                disabled={useExistingPet && !!selectedPet}
+                placeholder="Raça do pet"
               />
             </div>
             
@@ -238,7 +179,7 @@ const AppointmentForm: React.FC = () => {
                 value={petWeight} 
                 onChange={(e) => setPetWeight(e.target.value)} 
                 className="pet-input"
-                disabled={useExistingPet && !!selectedPet}
+                placeholder="Peso em kg"
               />
             </div>
             
@@ -250,7 +191,6 @@ const AppointmentForm: React.FC = () => {
                 onChange={(e) => setPetNotes(e.target.value)} 
                 placeholder="Ex: Alergias, comportamento, cuidados específicos..."
                 className="pet-input min-h-[100px] resize-none"
-                disabled={useExistingPet && !!selectedPet}
               />
             </div>
           </div>
@@ -268,8 +208,8 @@ const AppointmentForm: React.FC = () => {
                 value={ownerName} 
                 onChange={(e) => setOwnerName(e.target.value)} 
                 className="pet-input"
+                placeholder="Nome completo"
                 required
-                disabled={useExistingPet && !!selectedPet}
               />
             </div>
             
@@ -282,7 +222,6 @@ const AppointmentForm: React.FC = () => {
                 placeholder="(00) 00000-0000"
                 className="pet-input"
                 required
-                disabled={useExistingPet && !!selectedPet}
               />
             </div>
           </div>
