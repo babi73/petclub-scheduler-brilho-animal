@@ -135,6 +135,35 @@ export const useAppointments = () => {
 
       if (notificationError) console.error('Error creating notification:', notificationError);
 
+      // Get user profile for phone number
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('phone')
+        .eq('id', user.id)
+        .single();
+
+      // Send WhatsApp notification
+      if (profile?.phone) {
+        try {
+          await supabase.functions.invoke('send-whatsapp-notification', {
+            body: {
+              to: profile.phone,
+              message: `Seu agendamento para ${petData.name} foi confirmado!`,
+              appointmentDate: appointmentDate.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              }),
+            },
+          });
+        } catch (error) {
+          console.error('Error sending WhatsApp notification:', error);
+          // Don't fail the appointment creation if WhatsApp fails
+        }
+      }
+
       return appointment;
     },
     onSuccess: () => {
