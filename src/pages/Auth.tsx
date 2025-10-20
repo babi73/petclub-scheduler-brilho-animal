@@ -114,8 +114,9 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-petYellow-light to-petOrange-light p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-petYellow-light to-petOrange-light p-4">
+      <div className="w-full max-w-md">
+        <Card className="w-full">
         <CardHeader>
           <CardTitle className="text-3xl text-center text-petBrown">PetClub</CardTitle>
           <CardDescription className="text-center">
@@ -213,6 +214,7 @@ const Auth = () => {
           </Tabs>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 };
